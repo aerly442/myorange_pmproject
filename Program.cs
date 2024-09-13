@@ -49,7 +49,7 @@ app.MapFallbackToPage("/_Host");
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 using (var scope = scopeFactory.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<PizzaStoreContext>();
+    ///var db = scope.ServiceProvider.GetRequiredService<PizzaStoreContext>();
     //if (db.Database.EnsureCreated())
     ////{
      //   SeedData.Initialize(db);
