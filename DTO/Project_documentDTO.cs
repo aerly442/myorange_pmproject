@@ -7,9 +7,9 @@ using System.Xml.Linq;
 
 namespace myorange_pmproject.DTO;
 public class Project_documentDTO { 
-    private string _Id = "";
+    private int _Id = 0;
     [Display(Name = "Id")]
-    public string Id
+    public int Id
     {
     get { return this._Id; }
     set { this._Id = value; }
@@ -35,16 +35,16 @@ public class Project_documentDTO {
     get { return this._Createtime; }
     set { this._Createtime = value; }
     }
-    private string _State = "";
+    private int _State = 0;
     [Display(Name = "State")]
-    public string State
+    public int State
     {
     get { return this._State; }
     set { this._State = value; }
     }
-    private string _Managerid = "";
+    private int _Managerid = 0;
     [Display(Name = "Managerid")]
-    public string Managerid
+    public int Managerid
     {
     get { return this._Managerid; }
     set { this._Managerid = value; }

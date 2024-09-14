@@ -2,8 +2,8 @@
   namespace myorange_pmproject.Models;
 public class Project_request { 
  
-private string _Id = "";
-public string Id
+private int _Id = 0;
+public int Id
 {
 get { return this._Id; }
 set { this._Id = value; }
@@ -20,8 +20,8 @@ public string Content
 get { return this._Content; }
 set { this._Content = value; }
 }
-private string _State = "";
-public string State
+private int _State = 0;
+public int State
 {
 get { return this._State; }
 set { this._State = value; }
@@ -38,8 +38,8 @@ public string Request_type
 get { return this._Request_type; }
 set { this._Request_type = value; }
 }
-private string _Managerid = "";
-public string Managerid
+private int _Managerid = 0;
+public int Managerid
 {
 get { return this._Managerid; }
 set { this._Managerid = value; }

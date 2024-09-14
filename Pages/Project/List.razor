@@ -1,0 +1,78 @@
+﻿ @page "/Project/List"
+@using myorange_pmproject.DTO
+@using myorange_pmproject.Service
+@inject ProjectService projectService
+@attribute [Authorize(Roles = "Admin, User")]
+@inject NavigationManager nv
+
+    <div class="container mt-5">
+        <h2>项目信息表</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">项目名称</th>
+                    <th scope="col">开始时间</th>
+                    <th scope="col">结束时间</th>
+                    <th scope="col">创建时间</th>
+                    
+                    <th scope="col">状态</th>
+                    <th scope="col" style="width:400px">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (lst != null)
+                {
+                    @foreach (var item in lst)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Starttime.ToString("yyyy-MM-dd")</td>
+                            <td>@item.Endtime.ToString("yyyy-MM-dd")</td>
+                            <td>@item.Createtime.ToString("yyyy-MM-dd")</td>
+
+                            <td>@(item.State==1?"新建":"完成")</td>
+                            <td>
+                               
+                                <NavLink class="nav-link11" href="@("Project/Create?Id="+item.Id.ToString())">修改
+                                </NavLink>|<NavLink class="nav-link11" href="Project/Delete">删除</NavLink>
+                              
+                            </td>
+                        </tr>
+                    }
+                }
+                
+
+            
+             
+                <!-- 你可以继续添加更多的行 -->
+            </tbody>
+        </table>
+        </div>
+         <div class="d-flex justify-content-between mt-3">
+            <div>
+                <span>总数: 100</span>
+              
+            </div>
+            <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">上页</a></li>
+                        
+                        <li class="page-item"><a class="page-link" href="#">下页</a></li>
+                    </ul>
+              </nav>
+        </div>
+</div>
+
+ 
+
+@code {
+
+    private List<ProjectDTO> lst ;
+
+    protected override async Task OnInitializedAsync()
+    {
+        lst = await projectService.GetList("abc"); //.GetForecastAsync(DateOnly.FromDateTime(DateTime.Now));
+    }
+
+}

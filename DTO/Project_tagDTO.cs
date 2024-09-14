@@ -7,9 +7,9 @@ using System.Xml.Linq;
 
 namespace myorange_pmproject.DTO;
 public class Project_tagDTO { 
-private string _Id = "";
+private int _Id = 0;
  [Display(Name = "Id")]
-public string Id
+public int Id
 {
 get { return this._Id; }
 set { this._Id = value; }
@@ -21,9 +21,9 @@ public string Tag
 get { return this._Tag; }
 set { this._Tag = value; }
 }
-private string _Projectid = "";
+private int _Projectid = 0;
  [Display(Name = "Projectid")]
-public string Projectid
+public int Projectid
 {
 get { return this._Projectid; }
 set { this._Projectid = value; }
@@ -35,9 +35,9 @@ public string Createtime
 get { return this._Createtime; }
 set { this._Createtime = value; }
 }
-private string _Managerid = "";
+private int _Managerid = 0;
  [Display(Name = "Managerid")]
-public string Managerid
+public int Managerid
 {
 get { return this._Managerid; }
 set { this._Managerid = value; }

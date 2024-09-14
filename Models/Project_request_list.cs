@@ -3,20 +3,20 @@ public class Project_request_list {
 
 
 
-    private string _Id = "";
-    public string Id
+    private int _Id = 0;
+    public int Id
     {
     get { return this._Id; }
     set { this._Id = value; }
     }
-    private string _Projectid = "";
-    public string Projectid
+    private int _Projectid = 0;
+    public int Projectid
     {
     get { return this._Projectid; }
     set { this._Projectid = value; }
     }
-    private string _Projectid_project_requestid = "";
-    public string Projectid_project_requestid
+    private int _Projectid_project_requestid = 0;
+    public int Projectid_project_requestid
     {
     get { return this._Projectid_project_requestid; }
     set { this._Projectid_project_requestid = value; }

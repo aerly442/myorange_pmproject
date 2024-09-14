@@ -1,8 +1,8 @@
  namespace myorange_pmproject.Models;
 public class Project_tag { 
  
-private string _Id = "";
-public string Id
+private int _Id = 0;
+public int Id
 {
 get { return this._Id; }
 set { this._Id = value; }
@@ -13,8 +13,8 @@ public string Tag
 get { return this._Tag; }
 set { this._Tag = value; }
 }
-private string _Projectid = "";
-public string Projectid
+private int _Projectid = 0;
+public int Projectid
 {
 get { return this._Projectid; }
 set { this._Projectid = value; }
@@ -25,8 +25,8 @@ public string Createtime
 get { return this._Createtime; }
 set { this._Createtime = value; }
 }
-private string _Managerid = "";
-public string Managerid
+private int _Managerid = 0;
+public int Managerid
 {
 get { return this._Managerid; }
 set { this._Managerid = value; }

@@ -7,9 +7,9 @@ using System.Xml.Linq;
 namespace myorange_pmproject.DTO;
 public class Project_project_document_listDTO { 
  
-    private string _Id = "";
+    private int _Id = 0;
     [Display(Name = "Id")]
-    public string Id
+    public int Id
     {
     get { return this._Id; }
     set { this._Id = value; }

@@ -5,13 +5,12 @@ using System.Text;
 using System.Xml.Linq;
  
 namespace myorange_pmproject.DTO;
-public class ProjectDTO { 
-    private string _Id = "";
-    [Display(Name = "Id")]
-    public string Id
+public class ProjectDTO {
+    private int _Id = 0;
+    public int Id
     {
-    get { return this._Id; }
-    set { this._Id = value; }
+        get { return this._Id; }
+        set { this._Id = value; }
     }
     private string _Name = "";
     [Display(Name = "Name")]
@@ -48,16 +47,16 @@ public class ProjectDTO {
     get { return this._Endtime; }
     set { this._Endtime = value; }
     }
-    private string _State = "";
+    private int _State = 0;
     [Display(Name = "State")]
-    public string State
+    public int State
     {
     get { return this._State; }
     set { this._State = value; }
     }
-    private string _Managerid = "";
+    private int _Managerid = 0;
     [Display(Name = "Managerid")]
-    public string Managerid
+    public int Managerid
     {
     get { return this._Managerid; }
     set { this._Managerid = value; }

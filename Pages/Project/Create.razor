@@ -3,6 +3,8 @@
 @using myorange_pmproject.Service
 @inject ProjectService projectService
 @attribute [Authorize(Roles = "Admin, User")]
+@inject NavigationManager nv
+
 <PageTitle>创建工程</PageTitle>
 <div class="container mt-5">  
     <h2>项目信息表单</h2>  
@@ -40,13 +42,13 @@
 @code{
 
 
-     private ProjectDTO project = new ProjectDTO();
-     private String ErrorInfo = "";
-     
-     private async Task SaveProject(){
+    private ProjectDTO project = new ProjectDTO();
+    private String ErrorInfo = "";
+
+    private async Task SaveProject(){
 
         if (String.IsNullOrEmpty(project.Name) || String.IsNullOrEmpty(project.Intro)){
-            
+
             ErrorInfo = "请输入项目名称和简介";
 
         }
@@ -54,6 +56,12 @@
 
             var blnSave = await projectService.Save(project) ;
             ErrorInfo = blnSave?"保存成功":"保存失败";
+            if (blnSave)
+            {
+
+                nv.NavigateTo("/Project/List");
+
+            }
 
 
         }
