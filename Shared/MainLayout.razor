@@ -1,19 +1,43 @@
 ﻿@inherits LayoutComponentBase
+<CascadingAuthenticationState>
+    <AuthorizeView>
+        <NotAuthorized>
+            <PageTitle>Orange项目管理系统</PageTitle>
 
-<PageTitle>BlazorApp1</PageTitle>
+            <div class="page">
+                
+            
+                <main>
+                    
+            
+                    <article class="content px-4">
+                        <h5>您还没有登录，请点这里登录&nbsp;<a href="/LoginUser" class="btn btn-success">马上登录</a></h5>
+                    </article>
+                </main>
+            </div>
+        </NotAuthorized>
+        <Authorized>
+            <PageTitle>Orange项目管理系统</PageTitle>
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+            <div class="page">
+                <div class="sidebar">
+                    <NavMenu />
+                </div>
+            
+                <main>
+                    <div class="top-row px-4">
+                        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                    </div>
+            
+                    <article class="content px-4">
+                        @Body
+                    </article>
+                </main>
+            </div>
+            
+        </Authorized>
+    </AuthorizeView>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+</CascadingAuthenticationState>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+

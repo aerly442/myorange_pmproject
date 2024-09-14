@@ -18,7 +18,8 @@
         }
 
         .login-container {
-            max-width: 400px; /* 限制登录框的最大宽度 */
+            max-width: 480px; /* 限制登录框的最大宽度 */
+            width: 360px;
             margin: auto; /* 加上这个可以使得登录框在水平方向上居中，但由于我们在外部容器上使用了align-items-center，它也会垂直居中 */
         }
 
@@ -33,16 +34,19 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title text-center">请登录</h5>
-                    <form>
+                    
+                       
+                     
+                    <form  method="post">
                         <!-- 表单内容 -->
                         <div class="mb-3">
                             <label for="email" class="form-label">账号</label>
-                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                            <input type="text" class="form-control" name="UserName" id="email" aria-describedby="emailHelp">
                             <div id="emailHelp" class="form-text"></div>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">密码</label>
-                            <input type="password" class="form-control" id="password">
+                            <input type="password" name="Password" class="form-control" id="password">
                         </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="rememberMe">
@@ -50,6 +54,10 @@
                                记住我
                             </label>
                         </div>
+                        <div class="mb-3">
+                            <label for="email" class="text text-danger">@(this.ViewData["ShowError"])</label>                          
+                        </div>
+                    
                         <button type="submit" class="btn btn-primary btn-block">登录</button>
                     </form>
                 </div>

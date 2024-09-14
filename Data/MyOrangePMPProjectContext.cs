@@ -30,7 +30,7 @@ namespace myorange_pmproject.Data
 
         public DbSet<myorange_pmproject.Models.User> User { get; set; } = default!;
         
-
+        public DbSet<myorange_pmproject.Models.Project> Project { get; set; } = default!;
 
         //
 

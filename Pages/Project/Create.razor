@@ -1,0 +1,70 @@
+@page "/Project/Create"
+@using myorange_pmproject.DTO
+@using myorange_pmproject.Service
+@inject ProjectService projectService
+@attribute [Authorize(Roles = "Admin, User")]
+<PageTitle>创建工程</PageTitle>
+<div class="container mt-5">  
+    <h2>项目信息表单</h2>  
+     
+        <div class="mb-3">  
+            <label for="projectName" class="form-label">项目名称</label>  
+            <input type="text" @bind="project.Name" class="form-control" id="projectName" name="name" placeholder="请输入项目名称">  
+        </div>  
+        <div class="mb-3">  
+            <label for="projectIntro" class="form-label">项目简介</label>  
+            <textarea class="form-control" @bind="project.Intro" id="projectIntro" name="intro" rows="3" placeholder="请输入项目简介"></textarea>  
+        </div>  
+        <div class="mb-3">  
+            <label for="startTime" class="form-label">开始日期</label>  
+            <input type="date" @bind="project.Starttime" class="form-control" id="startTime" name="starttime">  
+        </div>  
+        <div class="mb-3">  
+            <label for="endTime" class="form-label">结束日期</label>  
+            <input type="date" @bind="project.Endtime" class="form-control" id="endTime" name="endtime">  
+        </div>  
+        <div class="mb-3">  
+            <label for="projectState" class="form-label">状态</label>  
+            <select class="form-select" id="projectState" @bind="project.State" name="state">  
+                <option selected value="0">请选择状态...</option>  
+                <option value="1">活跃</option>             
+                <option value="2">已完成</option>  
+            </select>  
+        </div> 
+        <div class="alert alert-danger " >  
+            @ErrorInfo
+          </div>
+        <button  class="btn btn-primary" @onclick="SaveProject">提交</button>  
+    
+</div>  
+@code{
+
+
+     private ProjectDTO project = new ProjectDTO();
+     private String ErrorInfo = "";
+     
+     private async Task SaveProject(){
+
+        if (String.IsNullOrEmpty(project.Name) || String.IsNullOrEmpty(project.Intro)){
+            
+            ErrorInfo = "请输入项目名称和简介";
+
+        }
+        else{
+
+            var blnSave = await projectService.Save(project) ;
+            ErrorInfo = blnSave?"保存成功":"保存失败";
+
+
+        }
+
+
+
+
+     }
+
+
+
+}
+  
+
