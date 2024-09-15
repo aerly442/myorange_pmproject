@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 
-namespace myorange_pmproject.Models;
+namespace myorange_pmproject.DTO;
 public class Project_requestDTO { 
  
 private int _Id = 0;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using myorange_pmproject.Models;
@@ -31,6 +32,19 @@ namespace myorange_pmproject.Data
         public DbSet<myorange_pmproject.Models.User> User { get; set; } = default!;
         
         public DbSet<myorange_pmproject.Models.Project> Project { get; set; } = default!;
+
+        public DbSet<myorange_pmproject.Models.Project_request> ProjectRequest { get; set; } = default!;
+
+        public DbSet<myorange_pmproject.Models.Project_document> ProjectDocument { get; set; } = default!;
+
+        public IQueryable<T> GetQueryable<T>() where T : class
+        {
+            var dbSetProperty = GetType().GetProperty(typeof(T).Name, BindingFlags.Public | BindingFlags.Instance);
+            if (dbSetProperty == null)
+                throw new InvalidOperationException($"No DbSet<{typeof(T).Name}> found in the DbContext.");
+
+            return (IQueryable<T>)dbSetProperty.GetValue(this);
+        }
 
         //
 

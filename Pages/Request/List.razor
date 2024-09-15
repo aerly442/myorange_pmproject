@@ -1,15 +1,15 @@
-﻿ @page "/Project/List"
+﻿ @page "/Request/List"
 @using myorange_pmproject.DTO
 @using myorange_pmproject.Service
-@inject ProjectService projectService
+@inject RequestService mService
 @attribute [Authorize(Roles = "Admin, User")]
 @inject NavigationManager nv
 
-  <div class="container">
+<div class="container">
     <div class="row" style="padding-bottom:30px">
-        <div class="col-md-5"> <h4>项目列表</h4></div>
-      </div>
-   
+        <div class="col-md-5"> <h4>需求列表</h4></div>
+    </div>
+
     <div class="row" style="padding-bottom:30px">
         <div class="col-md-2">
             <!-- 第一列：仅文本，实际使用时可能需要将其包装在适当的标签中，如<label> -->
@@ -18,8 +18,9 @@
         <div class="col-md-3">
             <!-- 第二列：下拉选择框 -->
             <select class="form-control" @bind="searchDTO.FieldName">
-                <option selected value="name">名称</option>
-                
+                <option selected value="title">名称</option>
+                <option  value="content">内容</option>
+
             </select>
         </div>
         <div class="col-md-4">
@@ -28,19 +29,17 @@
         </div>
         <div class="col-md-2">
             <!-- 最后一列：搜索按钮 -->
-            <button  class="btn btn-primary btn-block" @onclick="SearchProject">搜索</button>
-            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<a href="Project/Create/0" class="btn btn-success">新建</a>
+            <button class="btn btn-primary btn-block" @onclick="SearchData">搜索</button>
+            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<a href="Request/Create/0" class="btn btn-success">新建</a>
         </div>
     </div>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th scope="col">项目名称</th>
-                    <th scope="col">开始时间</th>
-                    <th scope="col">结束时间</th>
+                    <th scope="col">名称</th>
+                    <th scope="col">类型</th>
                     <th scope="col">创建时间</th>
-                    
                     <th scope="col">状态</th>
                     <th scope="col" style="width:150px">操作</th>
                 </tr>
@@ -51,50 +50,51 @@
                     @foreach (var item in lst)
                     {
                         <tr>
-                            <td>@item.Name</td>
-                            <td>@item.Starttime.ToString("yyyy-MM-dd")</td>
-                            <td>@item.Endtime.ToString("yyyy-MM-dd")</td>
+                            <td>@item.Title</td>
+                            <td>@(item.Request_type=="1"?"需求":"bug")</td>
+                           
                             <td>@item.Createtime.ToString("yyyy-MM-dd")</td>
 
-                            <td>@(item.State==1?"新建":"完成")</td>
+                            <td>@(item.State == 1 ? "新建" : "完成")</td>
                             <td>
-                               
-                                <NavLink class="nav-link11 btn btn-danger" href="@("Project/Create/"+item.Id.ToString())">修改
-                                </NavLink> 
+
+                                <NavLink class="nav-link11 btn btn-danger" href="@("Request/Create/"+item.Id.ToString())">
+                                    修改
+                                </NavLink>
                                 <button @onclick="@(() => ToggleDeleteModal(item.Id))" class="btn btn-primary bt" data-bs-toggle="modal"
                                         data-bs-target="#myModal">
-                                     删除
+                                    删除
                                 </button>
-                               
 
-                               
+
+
                             </td>
                         </tr>
                     }
                 }
-                
 
-            
-             
+
+
+
                 <!-- 你可以继续添加更多的行 -->
             </tbody>
         </table>
     </div>
-     <div class="d-flex justify-content-between mt-3">
-            <div>
-                <span>总数: @(TotalCount)</span>
-              
-            </div>
-            <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        @(PageHtml)
-                    </ul>
-              </nav>
-        </div>
+    <div class="d-flex justify-content-between mt-3">
+        <div>
+            <span>总数: @(TotalCount)</span>
 
-    
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                @(PageHtml)
+            </ul>
+        </nav>
+    </div>
+
+
 </div>
- 
+
 <div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -107,7 +107,7 @@
 
             <!-- 模态框内容 -->
             <div class="modal-body">
-               您确定要删除选定的数据吗？
+                您确定要删除选定的数据吗？
             </div>
 
             <!-- 模态框底部 -->
@@ -125,31 +125,31 @@
 
 @code {
 
-    private List<ProjectDTO> lst ;
-    private SearchDTO searchDTO = new SearchDTO(){FieldName="name",SearchValue=""};
+    private List<Project_requestDTO> lst;
+    private SearchDTO searchDTO = new SearchDTO() { FieldName = "name", SearchValue = "" };
     private String PageHtml = "";
     private int TotalCount = 0;
 
     protected override async Task OnInitializedAsync()
     {
-        var searchResultDTO = await projectService.GetList(searchDTO,1);
-        lst                 = searchResultDTO.Data;
-        PageHtml            = searchResultDTO.PageHtml;
-        TotalCount          = searchResultDTO.TotalCount;
+        var searchResultDTO = await mService.GetList(searchDTO, 1);
+        lst = searchResultDTO.Data;
+        PageHtml = searchResultDTO.PageHtml;
+        TotalCount = searchResultDTO.TotalCount;
         //.GetForecastAsync(DateOnly.FromDateTime(DateTime.Now));
     }
 
-    private async Task SearchProject()
+    private async Task SearchData()
     {
-        var searchResultDTO = await projectService.GetList(searchDTO, 1);
-        lst                 = searchResultDTO.Data;
-        PageHtml            = searchResultDTO.PageHtml;
-        TotalCount          = searchResultDTO.TotalCount;
+        var searchResultDTO = await mService.GetList(searchDTO, 1);
+        lst = searchResultDTO.Data;
+        PageHtml = searchResultDTO.PageHtml;
+        TotalCount = searchResultDTO.TotalCount;
 
     }
 
     private bool showDeleteModal = false;
-    private int projectId = 0; 
+    private int mId = 0;
 
     /// <summary>
     /// 设置项目ID
@@ -157,12 +157,12 @@
     /// <param name="id"></param>
     private void ToggleDeleteModal(int id)
     {
-        this.projectId = id;
+        this.mId = id;
     }
 
     private async Task HandleDeleteConfirmed()
     {
-        var blnDelete = projectService.Delete(new ProjectDTO() { Id = this.projectId });
+        var blnDelete = mService.Delete(new Project_requestDTO() { Id = this.mId });
         // 执行删除操作
         Console.WriteLine("删除操作执行");
 

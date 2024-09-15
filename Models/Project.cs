@@ -1,5 +1,5 @@
   namespace myorange_pmproject.Models;
-public class Project { 
+public class Project:ParentModel { 
  
   private int _Id = 0;
   public int Id

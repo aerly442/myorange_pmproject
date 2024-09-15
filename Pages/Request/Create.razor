@@ -1,0 +1,97 @@
+﻿@page "/Request/Create/{Id:int}"
+@using myorange_pmproject.DTO
+@using myorange_pmproject.Service
+@inject RequestService mService
+@attribute [Authorize(Roles = "Admin, User")]
+@inject NavigationManager nv
+<PageTitle>创建需求</PageTitle>
+<div class="container mt-5">
+    <h2>需求信息表单</h2>
+
+    <div class="mb-3">
+        <label for="projectName" class="form-label">名称</label>
+        <input type="text" @bind="p.Title" class="form-control"
+              placeholder="请输入名称">
+    </div>
+    <div class="mb-3">
+        <label for="projectIntro" class="form-label">描述</label>
+        <textarea class="form-control" @bind="p.Content"
+                  rows="3" placeholder="请输入描述"></textarea>
+    </div>
+    
+     
+    <div class="mb-3">
+        <label for="projectState" class="form-label">状态</label>
+        <select class="form-select"  @bind="p.Request_type">
+            <option selected value="0">请选择类...</option>
+            <option value="1">需求</option>
+            <option value="2">Bug</option>
+        </select>
+    </div>
+    <div class="alert alert-danger " style="display:@ErrorDisplay">
+        @ErrorInfo
+    </div>
+    <button class="btn btn-primary" @onclick="SaveData">提交</button>
+
+</div>
+
+
+@code {
+
+
+    private Project_requestDTO p = new Project_requestDTO();
+    private String ErrorInfo = "";
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private String ErrorDisplay = "none";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id > 0)
+        {
+            p = await mService.GetSinger(Id);
+        }
+
+    }
+
+    private async Task SaveData()
+    {
+
+        if (String.IsNullOrEmpty(p.Title) || String.IsNullOrEmpty(p.Content))
+        {
+
+            ErrorInfo = "请输入名称和内容";
+            ErrorDisplay = "block";
+
+        }
+        else
+        {
+
+            var blnSave = await mService.Save(p);
+            ErrorInfo = blnSave ? "保存成功" : "保存失败";
+            if (blnSave)
+            {
+
+                nv.NavigateTo("/Request/List");
+
+            }
+            else
+            {
+                ErrorDisplay = "block";
+            }
+
+
+        }
+
+
+
+
+    }
+
+
+
+
+
+}

@@ -32,13 +32,15 @@
                 <option value="1">活跃</option>             
                 <option value="2">已完成</option>  
             </select>  
-        </div> 
-        <div class="alert alert-danger " >  
-            @ErrorInfo
+        </div>
+    <div class="alert alert-danger " style="display:@ErrorDisplay">
+        @ErrorInfo
           </div>
         <button  class="btn btn-primary" @onclick="SaveProject">提交</button>  
     
 </div>  
+
+
 @code{
 
 
@@ -48,6 +50,7 @@
     [Parameter]
     public int projectId { get; set; }
 
+    private String ErrorDisplay = "none";
 
     protected override async Task OnInitializedAsync()
     {
@@ -55,7 +58,7 @@
         {
             project = await projectService.GetSinger(projectId);
         }
-       
+
     }
 
     private async Task SaveProject(){
@@ -63,6 +66,7 @@
         if (String.IsNullOrEmpty(project.Name) || String.IsNullOrEmpty(project.Intro)){
 
             ErrorInfo = "请输入项目名称和简介";
+            ErrorDisplay = "block";
 
         }
         else{
@@ -75,6 +79,10 @@
                 nv.NavigateTo("/Project/List");
 
             }
+            else
+            {
+                ErrorDisplay = "block";
+            }
 
 
         }
@@ -83,6 +91,8 @@
 
 
      }
+
+    
 
 
 

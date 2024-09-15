@@ -25,7 +25,11 @@ builder.Services.AddDbContext<MyOrangePMPProjectContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Myorange_PMProjectContext_sqlite") ?? throw new InvalidOperationException("Connection string 'RazorPagesMovieContext' not found.")));
 builder.Services.AddSqlite<PizzaStoreContext>("Data Source=pizza.db");
 builder.Services.AddScoped<WeatherForecastService>();
+
 builder.Services.AddScoped<ProjectService>();
+builder.Services.AddScoped<RequestService>();
+builder.Services.AddScoped<DocumentService>();
+
 builder.Services.AddScoped<CurrentUserService>();
 builder.Services.AddHttpClient();
 

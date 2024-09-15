@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using myorange_pmproject.Data;
 using myorange_pmproject.DTO;
@@ -6,17 +6,14 @@ using myorange_pmproject.Models;
 using Microsoft.Extensions.Logging;
 using System.Linq.Dynamic.Core;
 using myorange_pmproject.Services;
-
 namespace myorange_pmproject.Service
 {
-
-
-    public class ProjectService
+    public class RequestService
     {
         private readonly MyOrangePMPProjectContext _context;
-        private readonly ILogger<ProjectService> _logger;
+        private readonly ILogger<RequestService> _logger;
         private readonly CurrentUserService _currentUserService;
-        public ProjectService(MyOrangePMPProjectContext context, ILogger<ProjectService> logger,
+        public RequestService(MyOrangePMPProjectContext context, ILogger<RequestService> logger,
             CurrentUserService currentUserService)
         {
 
@@ -38,18 +35,19 @@ namespace myorange_pmproject.Service
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public async Task<bool> Save(ProjectDTO p){
+        public async Task<bool> Save(Project_requestDTO p)
+        {
 
-            var project      = p.Id == 0? new Project(): await _context.Project.FirstOrDefaultAsync(m => m.Id == p.Id); ;
-            p.Createtime     = DateTime.Now;
-            p.Managerid      = await _currentUserService.GetCurrentUserIdAsync();
+            var m = p.Id == 0 ? new Project_request() : await _context.ProjectRequest.FirstOrDefaultAsync(m => m.Id == p.Id); ;
+            p.Createtime = DateTime.Now;
+            p.Managerid = await _currentUserService.GetCurrentUserIdAsync();
 
-            _context.Entry(project).CurrentValues.SetValues(p);
+            _context.Entry(m).CurrentValues.SetValues(p);
 
-            if (p.Id == 0) {  _context.Project.Add(project);}
+            if (p.Id == 0) { _context.ProjectRequest.Add(m); }
 
             await _context.SaveChangesAsync();
-            return  true;
+            return true;
         }
 
         /// <summary>
@@ -57,14 +55,14 @@ namespace myorange_pmproject.Service
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public async Task<bool> Delete(ProjectDTO p)
+        public async Task<bool> Delete(Project_requestDTO p)
         {
 
-            var project = await _context.Project.FindAsync(p.Id);
+            var m = await _context.ProjectRequest.FindAsync(p.Id);
 
-            if (project != null)
+            if (m != null)
             {
-                _context.Project.Remove(project);
+                _context.ProjectRequest.Remove(m);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -78,34 +76,34 @@ namespace myorange_pmproject.Service
         /// </summary>
         /// <param name="projectId"></param>
         /// <returns></returns>
-        public async Task<ProjectDTO> GetSinger(int projectId)
+        public async Task<Project_requestDTO> GetSinger(int id)
         {
 
-            var query = this.GetProjectQuery();
-            var p     = await query.Where(x=>x.Id==projectId).FirstOrDefaultAsync();
+            var query = this.GetModelQuery();
+            var p = await query.Where(x => x.Id == id).FirstOrDefaultAsync();
 
             return p;
         }
 
-        private IQueryable<ProjectDTO> GetProjectQuery()
+        private IQueryable<Project_requestDTO> GetModelQuery()
         {
-             
-           return _context.Project.Select(
-                    x => new ProjectDTO
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Intro = x.Intro,
-                        Createtime = x.Createtime,
-                        Starttime = x.Starttime,
-                        Endtime = x.Endtime,
-                        State = x.State,
-                        Managerid = x.Managerid
 
-                    }
-                    );
-          
-             
+            return _context.ProjectRequest.Select(
+                     x => new Project_requestDTO
+                     {
+                         Id = x.Id,
+                         Title = x.Title,
+                         Content = x.Content,
+                         Createtime = x.Createtime,
+                         Request_type = x.Request_type,
+                        
+                         State = x.State,
+                         Managerid = x.Managerid
+
+                     }
+                     );
+
+
         }
 
         /// <summary>
@@ -114,9 +112,9 @@ namespace myorange_pmproject.Service
         /// <param name="searchDTO">查询对象：字段名称和值</param>
         /// <param name="pageNumber">当前页码</param>
         /// <returns></returns>
-        public async Task<SearchResultDTO<List<ProjectDTO>>> GetList(SearchDTO searchDTO,int pageNumber)
+        public async Task<SearchResultDTO<List<Project_requestDTO>>> GetList(SearchDTO searchDTO, int pageNumber)
         {
-            IQueryable<ProjectDTO> query = this.GetProjectQuery();
+            IQueryable<Project_requestDTO> query = this.GetModelQuery();
 
             string where    = string.IsNullOrEmpty(searchDTO.SearchValue) ? "Id>0" : searchDTO.FieldName + ".contains(\"" + searchDTO.SearchValue + "\")";
             var q           = query.Where(where);
@@ -125,13 +123,13 @@ namespace myorange_pmproject.Service
             var lst         = await q.OrderByDescending(x => x.Id).Skip(skip).Take(MyPage.PageSize).ToListAsync();
             var pageHtml    = MyPage.GetSplitPageHtml(totalCount, pageNumber, MyPage.PageSize);
 
-            var searchResultDTO = new SearchResultDTO<List<ProjectDTO>>(lst, pageHtml, totalCount);
+            var searchResultDTO = new SearchResultDTO<List<Project_requestDTO>>(lst, pageHtml, totalCount);
 
             this._logger.LogInformation("This is Test");
 
             return searchResultDTO;
 
- 
+
         }
 
         /// <summary>
@@ -139,14 +137,15 @@ namespace myorange_pmproject.Service
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public async Task<SearchResultDTO<List<ProjectDTO>>> GetList(String name)
+        public async Task<SearchResultDTO<List<Project_requestDTO>>> GetList(String name)
         {
 
-            return await this.GetList(new SearchDTO(){ FieldName = "name" ,SearchValue=name},1);
+            return await this.GetList(new SearchDTO() { FieldName = "name", SearchValue = name }, 1);
 
         }
-        
 
-    
+
+
     }
 }
+
