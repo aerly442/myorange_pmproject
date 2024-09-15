@@ -26,6 +26,7 @@ builder.Services.AddDbContext<MyOrangePMPProjectContext>(options =>
 builder.Services.AddSqlite<PizzaStoreContext>("Data Source=pizza.db");
 builder.Services.AddScoped<WeatherForecastService>();
 builder.Services.AddScoped<ProjectService>();
+builder.Services.AddScoped<CurrentUserService>();
 builder.Services.AddHttpClient();
 
 

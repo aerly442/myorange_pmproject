@@ -1,4 +1,4 @@
-@page "/Project/Create"
+@page "/Project/Create/{projectId:int}"
 @using myorange_pmproject.DTO
 @using myorange_pmproject.Service
 @inject ProjectService projectService
@@ -44,6 +44,19 @@
 
     private ProjectDTO project = new ProjectDTO();
     private String ErrorInfo = "";
+
+    [Parameter]
+    public int projectId { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (projectId > 0)
+        {
+            project = await projectService.GetSinger(projectId);
+        }
+       
+    }
 
     private async Task SaveProject(){
 
