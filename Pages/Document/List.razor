@@ -58,7 +58,7 @@
                             <td>@(item.State == 1 ? "新建" : "完成")</td>
                             <td>
 
-                                <NavLink class="nav-link11 btn btn-danger" href="@("Request/Create/"+item.Id.ToString())">
+                                <NavLink class="nav-link11 btn btn-danger" href="@("Document/Create/"+item.Id.ToString())">
                                     修改
                                 </NavLink>
                                 <button @onclick="@(() => ToggleDeleteModal(item.Id))" class="btn btn-primary bt" data-bs-toggle="modal"
