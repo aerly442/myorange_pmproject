@@ -11,6 +11,7 @@ namespace myorange_pmproject.Service
         public static readonly string UploadPath = "/upload/";
 
         private readonly IWebHostEnvironment? _hostEnvironment;
+        //IWebHostEnvironment Environment
         public FileUploadService(IWebHostEnvironment hostEnvironment)
         {
             _hostEnvironment = hostEnvironment;
@@ -19,7 +20,7 @@ namespace myorange_pmproject.Service
 
         public string GetTemplateContent(string fileName){
 
-            string path = _hostEnvironment.WebRootPath+"/template/"+fileName+".cs.html";
+            string path = _hostEnvironment.ContentRootPath+"/template/"+fileName+".cs.html";
             string content = System.IO.File.ReadAllText(path);
             return content;
             
@@ -40,7 +41,7 @@ namespace myorange_pmproject.Service
 
         public string GetFilePath()
         {
-            string path    = _hostEnvironment.WebRootPath;
+            string path    = _hostEnvironment.ContentRootPath;
             string subPath = UploadPath + DateTime.Now.ToString("yyyyMMdd");
             string localPath = path + subPath;
 
@@ -55,10 +56,10 @@ namespace myorange_pmproject.Service
 
         public string? ErrorInfo { get; set; }
 
-        public string Create(IFormFile file)
-        {
-            string fileName     = file.FileName;
-            string extName      = "";
+
+        public string GetExtName(string fileName){
+
+            string extName      = ".jpg";
             foreach(var a in aryExt)
             {
                 if (fileName.ToLower().EndsWith(a)){
@@ -67,6 +68,16 @@ namespace myorange_pmproject.Service
                 }
             }
 
+            return extName ;
+
+        }
+
+        public string Create(IFormFile file)
+        {
+            string fileName     = file.FileName;
+            string extName      = this.GetExtName(fileName);
+            
+
             if (string.IsNullOrEmpty(extName)){
 
                 this.ErrorInfo = "文件类型不支持，只支持："+ext;
@@ -74,7 +85,7 @@ namespace myorange_pmproject.Service
             }
             string aFileName    = this.GetFileName() + extName; 
             string relativePath = this.GetFilePath() + "/" + aFileName; // 相对路径
-            string filePath     = _hostEnvironment.WebRootPath + relativePath; // 获取绝对路径
+            string filePath     = _hostEnvironment.ContentRootPath + relativePath; // 获取绝对路径
 
             // 保存文件到指定路径
             using (var stream = new FileStream(filePath, FileMode.Create))

@@ -16,7 +16,7 @@ namespace myorange_pmproject.Service
 
         public string GetTemplateContent(string fileName){
 
-            string path = _hostEnvironment.WebRootPath+"/template/"+fileName+".cs.html";
+            string path = _hostEnvironment.ContentRootPath+"/template/"+fileName+".cs.html";
             string content = System.IO.File.ReadAllText(path);
             return content;
             

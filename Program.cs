@@ -31,6 +31,10 @@ builder.Services.AddScoped<RequestService>();
 builder.Services.AddScoped<DocumentService>();
 
 builder.Services.AddScoped<CurrentUserService>();
+
+builder.Services.AddScoped<FileUploadService>();
+
+
 builder.Services.AddHttpClient();
 
 
