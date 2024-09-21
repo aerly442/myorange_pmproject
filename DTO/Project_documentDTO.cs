@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
+using myorange_pmproject.DTO;
 
 namespace myorange_pmproject.DTO
 {
@@ -54,5 +55,10 @@ namespace myorange_pmproject.DTO
             get { return this._Managerid; }
             set { this._Managerid = value; }
         }
+
+        public List<ProjectDTO>? Projects  {get;set;}
+
+        public int ProjectId {get;set;}
+        public string ProjectName {get;set;}
     }
 }

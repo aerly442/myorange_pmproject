@@ -1,4 +1,4 @@
-﻿ @page "/Document/List"
+﻿@page "/Document/List"
 @using myorange_pmproject.DTO
 @using myorange_pmproject.Service
 @inject DocumentService mService
@@ -37,8 +37,9 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th scope="col">名称</th>
-                    
+                    <th scope="col">编号</th> 
+                    <th scope="col">名称</th>                   
+                    <th scope="col">所属项目</th>
                     <th scope="col">创建时间</th>
                     <th scope="col">状态</th>
                     <th scope="col" style="width:150px">操作</th>
@@ -50,10 +51,18 @@
                     @foreach (var item in lst)
                     {
                         <tr>
+                            <td>@item.Id</td>
                             <td>@item.Title</td>
                            
-
-                            <td>@item.Createtime.ToString("yyyy-MM-dd")</td>
+                            <td>
+                              <NavLink class="nav-link" href="@("Project/Create/"+item.ProjectId.ToString())">
+                                    @item.ProjectName
+                                </NavLink>
+                            
+                           </td>
+                            <td>
+                                @item.Createtime.ToString("yyyy-MM-dd")
+                             </td>
 
                             <td>@(item.State == 1 ? "新建" : "完成")</td>
                             <td>

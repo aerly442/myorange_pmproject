@@ -25,8 +25,23 @@
                   rows="3" placeholder="请输入内容"></textarea>
      
     </div>
-    <!-- 文件上传组件 -->
-        <FileUpload FileName="@UpLoadFileName"></FileUpload>
+    <div class="mb-3">
+        <label for="projectInfo" class="form-label">选择对应项目</label>
+        
+     <select class="form-control"  @onchange="HandleOptionChanged">  
+        @foreach (var p1 in p.Projects)  
+        {  
+            <option value="@p1.Id">@p1.Name</option>  
+        }  
+        </select>  
+    </div>
+
+    <div class="mb-3">
+        <label for="projectInfo" class="form-label"></label>    
+        <FileUpload  OnUploadFinished="HandleFileUploadEvent"></FileUpload>
+    </div>
+    <!-- 文件上传组件  -->
+   
     <div class="mb-3">
             <DataAnnotationsValidator />
             <ValidationSummary />
@@ -53,7 +68,9 @@
     private String ErrorDisplay = "none";
     //private string content = "<p>Hello, TinyMCE!</p>";
 
-    private string UpLoadFileName = "123.jpg";
+    //private string UpLoadFileName = "123.jpg";
+
+    private List<string> lstFiles = new List<string>();
 
 
     protected override async Task OnInitializedAsync()
@@ -65,11 +82,29 @@
 
     }
 
+    private int ProjectId;  
+    private List<string> Options = new List<string> { "选项1", "选项2", "选项3" };  
+  
+    private void HandleOptionChanged(ChangeEventArgs e)  
+    {  
+        var id    = e.Value.ToString();  
+        int nId   = 0 ;
+        int.TryParse(id, out nId) ;
+        ProjectId  = nId ;
+    } 
+
+    private void HandleFileUploadEvent(List<string> _lstFiles)  
+    {  
+        this.lstFiles = _lstFiles ;
+        // 处理来自子组件的数据  
+    } 
+
 
 
     private async Task SaveData()
     {
 
+      
         if (String.IsNullOrEmpty(p.Title) || String.IsNullOrEmpty(p.Content))
         {
 
@@ -79,9 +114,7 @@
         }
         else
         {
-
-            var f = this.UpLoadFileName;
-            var blnSave = await mService.Save(p);
+            var blnSave = await mService.Save(p,ProjectId,null);
             ErrorInfo = blnSave ? "保存成功" : "保存失败";
             if (blnSave)
             {
@@ -96,7 +129,7 @@
 
 
         }
-
+      
 
 
 

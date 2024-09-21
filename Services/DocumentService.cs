@@ -36,18 +36,45 @@ namespace myorange_pmproject.Service
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public async Task<bool> Save(Project_documentDTO p)
+        public async Task<Project_document> Save(Project_documentDTO p)
         {
 
             var m = p.Id == 0 ? new Project_document() : await _context.ProjectDocument.FirstOrDefaultAsync(m => m.Id == p.Id); ;
             p.Createtime = DateTime.Now;
-            p.Managerid = await _currentUserService.GetCurrentUserIdAsync();
+            p.Managerid  = await _currentUserService.GetCurrentUserIdAsync();
 
             _context.Entry(m).CurrentValues.SetValues(p);
 
             if (p.Id == 0) { _context.ProjectDocument.Add(m); }
 
             await _context.SaveChangesAsync();
+            return m;
+        }
+
+        public async Task<bool> Save(Project_documentDTO p,int projectId,List<String> lstFiles)
+        {
+            //01 保存文档信息
+            var d = await this.Save(p);
+
+            int documentId = d.Id ; 
+
+            //02 保存和项目的对应信息
+            var plist =  await _context.ProjectDocumentList.FirstOrDefaultAsync(m => m.Project_documentid == documentId) ;
+            if (plist!=null && plist.Id>0){
+                plist.Projectid = projectId;
+            }
+            else{
+
+                plist                    = new Project_project_document_list();
+                plist.Projectid          = projectId;
+                plist.Project_documentid = documentId;
+                plist.Createtime         = DateTime.Now.ToString();
+                _context.ProjectDocumentList.Add(plist);
+            }
+
+            await _context.SaveChangesAsync();
+
+            //03 保存附件
             return true;
         }
 
@@ -80,29 +107,80 @@ namespace myorange_pmproject.Service
         public async Task<Project_documentDTO> GetSinger(int id)
         {
 
-            var query = this.GetModelQuery();
-            var p = await query.Where(x => x.Id == id).FirstOrDefaultAsync();
+            var query  = this.GetSingerModelQuery();
+            var p      = await query.Where(x => x.Id == id).FirstOrDefaultAsync();
+            if  (p!=null ){
+                p.Projects = await _context.Project.Select(x=>new ProjectDTO{
+                    Id =x.Id,
+                    Name = x.Name
+                }).ToListAsync();
+            }
 
             return p;
         }
 
+
+        private IQueryable<Project_documentDTO> GetSingerModelQuery()
+        {
+
+    
+            return from   d in  _context.ProjectDocument
+                select  new Project_documentDTO
+                            {
+                                Id = d.Id,
+                                Title = d.Title,
+                                Content = d.Content,
+                                Createtime = d.Createtime,                         
+
+                                State = d.State,
+                                Managerid = d.Managerid
+                            
+
+                    };
+
+        }
+
+
         private IQueryable<Project_documentDTO> GetModelQuery()
         {
 
-            return _context.ProjectDocument.Select(
-                     x => new Project_documentDTO
-                     {
-                         Id = x.Id,
-                         Title = x.Title,
-                         Content = x.Content,
-                         Createtime = x.Createtime,
-                     
+    
+            return from plist in _context.ProjectDocumentList 
+                 join p in _context.Project on plist.Projectid equals p.Id
+                 join d in _context.ProjectDocument  on plist.Project_documentid equals d.Id
+                select  new Project_documentDTO
+                            {
+                                Id = d.Id,
+                                Title = d.Title,
+                                Content = d.Content,
+                                Createtime = d.Createtime,                         
 
-                         State = x.State,
-                         Managerid = x.Managerid
+                                State = d.State,
+                                Managerid = d.Managerid,
+                                ProjectId = p.Id,
+                                ProjectName = p.Name
 
-                     }
-                     );
+                    };
+
+            /*
+
+                    var leftJoinResult = from doc in documents  
+                             join list in documentLists  
+                                 on doc.Id equals list.ProjectDocumentId into docLists  
+                             from list in docLists.DefaultIfEmpty() // 左外连接  
+                             join proj in projects  
+                                 on list?.ProjectId equals proj?.Id into projGroup // 注意这里使用了可空传播  
+                             from proj in projGroup.DefaultIfEmpty() // 再次左外连接  
+                             select new  
+                             {  
+                                 DocumentTitle = doc.Title,  
+                                 DocumentListId = list?.Id,  
+                                 ProjectId = list?.ProjectId,  
+                                 ProjectName = proj?.Name  
+                             };  
+                */
+        
+
 
 
         }

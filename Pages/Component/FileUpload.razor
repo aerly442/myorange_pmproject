@@ -32,14 +32,21 @@
     private bool isLoading;
     private decimal progressPercent;
 
-    [Parameter]
-    public string FileName { get; set; } = "";
+    //[Parameter]
+    //public string FileName { get; set; } = "";
+
+
+    [Parameter]  
+    public EventCallback<List<string>> OnUploadFinished { get; set; }  
+  
+ 
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
     {
-        isLoading = true;
+        isLoading       = true;
         loadedFiles.Clear();
         progressPercent = 0;
+        List<string> lstFiles = new List<string>();
 
         foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
         {
@@ -65,14 +72,12 @@
             }
 
             loadedFiles.Add(file);
-
-            //Logger.LogInformation(
-            //    "Unsafe Filename: {UnsafeFilename} File saved: {Filename}",
-            //    file.Name, trustedFileName);
+            lstFiles.Add(relativePath); 
 
 
         }
-        this.FileName = "abd.jpg";
+        //this.FileName = "abd.jpg";
+        await OnUploadFinished.InvokeAsync(lstFiles);  
         isLoading = false;
     }
 
