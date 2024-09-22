@@ -56,9 +56,9 @@ namespace myorange_pmproject.DTO
             set { this._Managerid = value; }
         }
 
-        public List<ProjectDTO>? Projects  {get;set;}
+        //public List<ProjectDTO>? Projects  {get;set;}
 
-        public int ProjectId {get;set;}
-        public string ProjectName {get;set;}
+        public int? ProjectId {get;set;}
+        public string? ProjectName {get;set;}
     }
 }

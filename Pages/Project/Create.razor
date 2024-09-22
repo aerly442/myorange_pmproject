@@ -4,18 +4,24 @@
 @inject ProjectService projectService
 @attribute [Authorize(Roles = "Admin, User")]
 @inject NavigationManager nv
-
-<PageTitle>创建工程</PageTitle>
-<div class="container mt-5">  
+@using Radzen
+@using Radzen.Blazor
+<div class="container">  
     <h2>项目信息表单</h2>  
-     
+    <EditForm Model="@project" OnValidSubmit="@SaveProject">
         <div class="mb-3">  
             <label for="projectName" class="form-label">项目名称</label>  
             <input type="text" @bind="project.Name" class="form-control" id="projectName" name="name" placeholder="请输入项目名称">  
         </div>  
         <div class="mb-3">  
-            <label for="projectIntro" class="form-label">项目简介</label>  
-            <textarea class="form-control" @bind="project.Intro" id="projectIntro" name="intro" rows="3" placeholder="请输入项目简介"></textarea>  
+            <label for="projectIntro" class="form-label">项目简介</label>
+            <RadzenHtmlEditor @bind-Value="project.Intro"
+                              style="height: 450px;"
+                               UploadUrl="upload/image" />
+
+
+            <RadzenDialog />
+           
         </div>  
         <div class="mb-3">  
             <label for="startTime" class="form-label">开始日期</label>  
@@ -33,10 +39,16 @@
                 <option value="2">已完成</option>  
             </select>  
         </div>
-    <div class="alert alert-danger " style="display:@ErrorDisplay">
-        @ErrorInfo
-          </div>
-        <button  class="btn btn-primary" @onclick="SaveProject">提交</button>  
+        <div class="mb-3">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+        </div>
+        <div class="alert alert-danger " style="display:@ErrorDisplay">
+          @ErrorInfo
+         </div>
+        <button type="submit" class="btn btn-primary" >提交</button> 
+        
+    </EditForm>
     
 </div>  
 

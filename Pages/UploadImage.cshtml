@@ -1,0 +1,15 @@
+﻿@page
+@model myorange_pmproject.Pages.UploadImageModel
+@{
+	 
+}
+@{
+	if (this.Model.ShowDefaultJson){
+ 
+		@Html.Raw(this.Model.DefaultJson)
+	}
+	else{
+
+		@Html.Raw(this.Model.SuccessJson)
+	}
+}

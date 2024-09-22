@@ -7,11 +7,14 @@
 
 <div class="container">
     <div class="row" style="padding-bottom:30px">
-        <div class="col-md-5"> <h4>文档列表</h4></div>
+        <div class="col-md-5"> 
+            <h4>文档列表</h4>
+        </div>
+        <div class="col-md-5 text-end"></div>
     </div>
 
     <div class="row" style="padding-bottom:30px">
-        <div class="col-md-2">
+        <div class="col-md-1">
             <!-- 第一列：仅文本，实际使用时可能需要将其包装在适当的标签中，如<label> -->
             <p class="mb-0">请选择</p>
         </div>
@@ -30,7 +33,11 @@
         <div class="col-md-2">
             <!-- 最后一列：搜索按钮 -->
             <button class="btn btn-primary btn-block" @onclick="SearchData">搜索</button>
-            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<a href="Document/Create/0" class="btn btn-success">新建</a>
+           
+        </div>
+        <div class="col-md-2 text-center">
+          
+            <a href="Document/Create/0" class="btn btn-success">新建</a>
         </div>
     </div>
     <div class="table-responsive">
@@ -67,10 +74,10 @@
                             <td>@(item.State == 1 ? "新建" : "完成")</td>
                             <td>
 
-                                <NavLink class="nav-link11 btn btn-danger" href="@("Document/Create/"+item.Id.ToString())">
+                                <NavLink class="nav-link11 btn btn-primary" href="@("Document/Create/"+item.Id.ToString())">
                                     修改
                                 </NavLink>
-                                <button @onclick="@(() => ToggleDeleteModal(item.Id))" class="btn btn-primary bt" data-bs-toggle="modal"
+                                <button @onclick="@(() => ToggleDeleteModal(item.Id))" class="btn btn-danger bt" data-bs-toggle="modal"
                                         data-bs-target="#myModal">
                                     删除
                                 </button>

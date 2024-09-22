@@ -3,16 +3,22 @@
 @using myorange_pmproject.Service
 @using myorange_pmproject.Pages.Component;
 @inject DocumentService mService
+@inject ProjectService pService
 @attribute [Authorize(Roles = "Admin, User")]
 @inject NavigationManager nv
+@using Radzen
+@using Radzen.Blazor
+
+
+ 
 
 
  
 <PageTitle>创建文档</PageTitle>
 <div class="container mt-5">
     <h2>文档信息表单</h2>
-    <EditForm Model="@p" OnValidSubmit="SaveData">
    
+   <EditForm Model="@p" OnValidSubmit="@SaveData">  
     <div class="mb-3">
          <label for="projectName" class="form-label">标题</label>
         <input type="text" @bind="p.Title" class="form-control"
@@ -21,21 +27,28 @@
      </div>
     <div class="mb-3">
         <label for="projectIntro" class="form-label">内容</label>
-        <textarea class="form-control" @bind="p.Content"
-                  rows="3" placeholder="请输入内容"></textarea>
-     
-    </div>
-    <div class="mb-3">
-        <label for="projectInfo" class="form-label">选择对应项目</label>
-        
-     <select class="form-control"  @onchange="HandleOptionChanged">  
-        @foreach (var p1 in p.Projects)  
-        {  
-            <option value="@p1.Id">@p1.Name</option>  
-        }  
-        </select>  
-    </div>
+   
 
+        <RadzenHtmlEditor @bind-Value="p.Content"
+                          style="height: 450px;"
+                          Input=@OnInput Change=@OnChange Paste=@OnPaste UploadComplete=@OnUploadComplete
+                          Execute=@OnExecute UploadUrl="upload/image" />
+
+
+        <RadzenDialog />
+
+   
+
+    </div>
+        <div class="mb-3">
+            <label for="ddlProjects" class="form-label">选择对应项目</label>
+            <RadzenDropDown @bind-Value="@ProjectId" Data="@Projects"
+                            TextProperty="@nameof(ProjectDTO.Name)"
+                            ValueProperty="@nameof(ProjectDTO.Id)"
+                            Style="width: 100%; " Name="ddlProjects" />
+
+        </div>
+        <!-- rich text editor -->
     <div class="mb-3">
         <label for="projectInfo" class="form-label"></label>    
         <FileUpload  OnUploadFinished="HandleFileUploadEvent"></FileUpload>
@@ -45,12 +58,14 @@
     <div class="mb-3">
             <DataAnnotationsValidator />
             <ValidationSummary />
-    </div>
+     </div>
     <div class="alert alert-danger " style="display:@ErrorDisplay">
         @ErrorInfo
     </div>
-    <button type="submit" class="btn btn-primary" >提交</button>
-   </EditForm>
+    <button type="submit" class="btn btn-primary">提交</button>
+ 
+
+</EditForm>
  
 
 </div>
@@ -59,39 +74,77 @@
 @code {
 
 
+
     private Project_documentDTO p = new Project_documentDTO();
     private String ErrorInfo      = "";
 
     [Parameter]
     public int Id { get; set; }
-
     private String ErrorDisplay = "none";
-    //private string content = "<p>Hello, TinyMCE!</p>";
-
-    //private string UpLoadFileName = "123.jpg";
-
+    private int ProjectId;
     private List<string> lstFiles = new List<string>();
+    private List<ProjectDTO> Projects;
 
 
     protected override async Task OnInitializedAsync()
     {
+        Projects = await pService.GetList();
+
         if (Id > 0)
         {
             p = await mService.GetSinger(Id);
+            if (p!= null)
+            {
+                this.ProjectId = p.ProjectId!=null ?(int)p.ProjectId:0;
+                StateHasChanged();
+            }
+
+            //this.ProjectId = p.ProjectId!=null ?(int)p.ProjectId:0;
+
+
         }
+        
+        
+      
 
     }
 
-    private int ProjectId;  
-    private List<string> Options = new List<string> { "选项1", "选项2", "选项3" };  
+    
+     
+
+
+    void OnPaste(HtmlEditorPasteEventArgs args)
+    {
+        //console.Log($"Paste: {args.Html}");
+    }
+
+    void OnChange(string html)
+    {
+        // console.Log($"Change: {html}");
+    }
+
+    void OnInput(string html)
+    {
+        //console.Log($"Input: {html}");
+    }
+
+    void OnExecute(HtmlEditorExecuteEventArgs args)
+    {
+        //console.Log($"Execute: {args.CommandName}");
+    }
+
+    void OnUploadComplete(UploadCompleteEventArgs args)
+    {
+        //console.Log($"Upload complete: {args.RawResponse}");
+    }
   
-    private void HandleOptionChanged(ChangeEventArgs e)  
-    {  
-        var id    = e.Value.ToString();  
-        int nId   = 0 ;
-        int.TryParse(id, out nId) ;
-        ProjectId  = nId ;
-    } 
+    // private void HandleOptionChanged(ChangeEventArgs e)  
+    // {  
+    //     var id    = e.Value.ToString();  
+    //     int nId   = 0 ;
+    //     int.TryParse(id, out nId) ;
+    //     ProjectId  = nId ;
+    // } 
 
     private void HandleFileUploadEvent(List<string> _lstFiles)  
     {  

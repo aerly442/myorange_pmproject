@@ -15,25 +15,52 @@
     <h2>需求信息表单</h2>
 
     <div class="mb-3">
-        <label for="projectName" class="form-label">名称</label>
+        <label for="Title" class="form-label">名称</label>
         <input type="text" @bind="p.Title" class="form-control"
               placeholder="请输入名称">
     </div>
     <div class="mb-3">
-        <label for="projectIntro" class="form-label">描述</label>
+        <label for="Content" class="form-label">描述</label>
         <textarea class="form-control" @bind="p.Content"
                   rows="3" placeholder="请输入描述"></textarea>
     </div>
     
      
     <div class="mb-3">
-        <label for="projectState" class="form-label">状态</label>
+        <label for="Request_type" class="form-label">类型</label>
         <select class="form-select"  @bind="p.Request_type">
-            <option selected value="0">请选择类...</option>
+            <option selected value="0">请选择类型</option>
             <option value="1">需求</option>
             <option value="2">Bug</option>
         </select>
  
+    </div>
+
+    <div class="mb-3">
+        <label for="startTime" class="form-label">开始日期</label>
+        <input type="date" @bind="p.Starttime" class="form-control" id="startTime" name="starttime">
+    </div>
+    <div class="mb-3">
+        <label for="endTime" class="form-label">期望完成时间</label>
+        <input type="date" @bind="p.Willfinishtime" class="form-control" id="endTime" name="endtime">
+    </div>
+
+    <div class="mb-3">
+        <label for="endTime" class="form-label">完成时间</label>
+        <input type="date" @bind="p.Finishtime" class="form-control" id="endTime" name="endtime">
+    </div>
+
+    <div class="mb-3">
+        <label for="Request_type" class="form-label">状态</label>
+        <select class="form-select" @bind="p.State">
+            <option selected value="0">请选择</option>
+            <option value="1">新建</option>
+            <option value="2">进行中</option>
+            <option value="3">完成</option>
+            <option value="4">挂起</option>
+            <option value="-1">取消</option>
+        </select>
+
     </div>
     <div class="alert alert-danger " style="display:@ErrorDisplay">
         @ErrorInfo

@@ -6,7 +6,7 @@ namespace myorange_pmproject.Service
     public class FileUploadService
     {
         
-        public static readonly string ext = ".pdf,.docx,.xlsx,.jpg,.jpeg,.png,.gif";
+        public static readonly string ext = ".pdf,.docx,.xlsx,.jpg,.jpeg,.png,.gif,.wps";
         public static readonly string[] aryExt = ext.Split(",");
         public static readonly string UploadPath = "/upload/";
 
@@ -20,7 +20,7 @@ namespace myorange_pmproject.Service
 
         public string GetTemplateContent(string fileName){
 
-            string path = _hostEnvironment.ContentRootPath+"/template/"+fileName+".cs.html";
+            string path = _hostEnvironment.WebRootPath+ "/template/"+fileName+".cs.html";
             string content = System.IO.File.ReadAllText(path);
             return content;
             
@@ -41,7 +41,7 @@ namespace myorange_pmproject.Service
 
         public string GetFilePath()
         {
-            string path    = _hostEnvironment.ContentRootPath;
+            string path    = _hostEnvironment.WebRootPath;
             string subPath = UploadPath + DateTime.Now.ToString("yyyyMMdd");
             string localPath = path + subPath;
 
@@ -85,7 +85,7 @@ namespace myorange_pmproject.Service
             }
             string aFileName    = this.GetFileName() + extName; 
             string relativePath = this.GetFilePath() + "/" + aFileName; // 相对路径
-            string filePath     = _hostEnvironment.ContentRootPath + relativePath; // 获取绝对路径
+            string filePath     = _hostEnvironment.WebRootPath + relativePath; // 获取绝对路径
 
             // 保存文件到指定路径
             using (var stream = new FileStream(filePath, FileMode.Create))

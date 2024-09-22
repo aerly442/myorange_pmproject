@@ -98,7 +98,10 @@ namespace myorange_pmproject.Service
                          Request_type = x.Request_type,
                         
                          State = x.State,
-                         Managerid = x.Managerid
+                         Managerid = x.Managerid,
+                         Finishtime = x.Finishtime,
+                         Willfinishtime = x.Willfinishtime,
+                         Starttime = x.Starttime
 
                      }
                      );

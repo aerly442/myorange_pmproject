@@ -107,60 +107,82 @@ namespace myorange_pmproject.Service
         public async Task<Project_documentDTO> GetSinger(int id)
         {
 
-            var query  = this.GetSingerModelQuery();
+            var query  = this.GetModelQuery();
             var p      = await query.Where(x => x.Id == id).FirstOrDefaultAsync();
-            if  (p!=null ){
-                p.Projects = await _context.Project.Select(x=>new ProjectDTO{
-                    Id =x.Id,
-                    Name = x.Name
-                }).ToListAsync();
-            }
+            //if  (p!=null ){
+            //    p.Projects = await _context.Project.Select(x=>new ProjectDTO{
+            //        Id =x.Id,
+            //        Name = x.Name
+            //    }).ToListAsync();
+            //}
 
             return p;
         }
 
 
-        private IQueryable<Project_documentDTO> GetSingerModelQuery()
-        {
+        //private IQueryable<Project_documentDTO> GetSingerModelQuery()
+        //{
 
     
-            return from   d in  _context.ProjectDocument
-                select  new Project_documentDTO
-                            {
-                                Id = d.Id,
-                                Title = d.Title,
-                                Content = d.Content,
-                                Createtime = d.Createtime,                         
+        //    return from   d in  _context.ProjectDocument
+        //        select  new Project_documentDTO
+        //                    {
+        //                        Id = d.Id,
+        //                        Title = d.Title,
+        //                        Content = d.Content,
+        //                        Createtime = d.Createtime,                         
 
-                                State = d.State,
-                                Managerid = d.Managerid
+        //                        State = d.State,
+        //                        Managerid = d.Managerid
                             
 
-                    };
+        //            };
 
-        }
+        //}
 
 
         private IQueryable<Project_documentDTO> GetModelQuery()
         {
 
-    
-            return from plist in _context.ProjectDocumentList 
-                 join p in _context.Project on plist.Projectid equals p.Id
-                 join d in _context.ProjectDocument  on plist.Project_documentid equals d.Id
-                select  new Project_documentDTO
-                            {
-                                Id = d.Id,
-                                Title = d.Title,
-                                Content = d.Content,
-                                Createtime = d.Createtime,                         
+            var q = from d in _context.ProjectDocument join list in _context.ProjectDocumentList
+                    on d.Id equals list.Project_documentid into docList
+                    from list in docList.DefaultIfEmpty()
+                    join proj in _context.Project on list.Projectid equals proj.Id into projGroup
+                    from proj in projGroup.DefaultIfEmpty()
+                    select new Project_documentDTO
+                    {
+                        Id = d.Id,
+                        Title = d.Title,
+                        Content = d.Content,
+                        Createtime = d.Createtime,
 
-                                State = d.State,
-                                Managerid = d.Managerid,
-                                ProjectId = p.Id,
-                                ProjectName = p.Name
+                        State = d.State,
+                        Managerid = d.Managerid,
+                        ProjectId = proj.Id,
+                        ProjectName = proj.Name
 
                     };
+            return q;
+
+            //
+            /*
+             return from plist in _context.ProjectDocumentList 
+                  join p in _context.Project on plist.Projectid equals p.Id
+                  join d in _context.ProjectDocument  on plist.Project_documentid equals d.Id
+                 select  new Project_documentDTO
+                             {
+                                 Id = d.Id,
+                                 Title = d.Title,
+                                 Content = d.Content,
+                                 Createtime = d.Createtime,                         
+
+                                 State = d.State,
+                                 Managerid = d.Managerid,
+                                 ProjectId = p.Id,
+                                 ProjectName = p.Name
+
+                     };
+              */
 
             /*
 
@@ -179,7 +201,7 @@ namespace myorange_pmproject.Service
                                  ProjectName = proj?.Name  
                              };  
                 */
-        
+
 
 
 

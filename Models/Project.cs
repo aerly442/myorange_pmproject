@@ -1,11 +1,11 @@
   namespace myorange_pmproject.Models;
-public class Project:ParentModel { 
+public class Project { 
  
   private int _Id = 0;
   public int Id
   {
-  get { return this._Id; }
-  set { this._Id = value; }
+      get { return this._Id; }
+      set { this._Id = value; }
   }
   private string _Name = "";
   public string Name

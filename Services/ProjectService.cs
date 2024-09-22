@@ -73,6 +73,15 @@ namespace myorange_pmproject.Service
 
         }
 
+        public async Task<List<ProjectDTO>> GetList()
+        {
+
+            var query = this.GetProjectQuery();
+            var p = await query.ToListAsync<ProjectDTO>();
+
+            return p;
+        }
+
         /// <summary>
         /// 获取单个对象
         /// </summary>

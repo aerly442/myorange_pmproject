@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace myorange_pmproject.Models
@@ -35,6 +36,25 @@ namespace myorange_pmproject.Models
         {
             get { return this._Createtime; }
             set { this._Createtime = value; }
+        }
+
+        private DateTime? _Starttime ;
+        public DateTime? Starttime
+        {
+            get { return this._Starttime; }
+            set { this._Starttime = value; }
+        }
+        private DateTime? _Finishtime ;
+        public DateTime? Finishtime
+        {
+            get { return this._Finishtime; }
+            set { this._Finishtime = value; }
+        }
+        private DateTime? _Willfinishtime ;
+        public DateTime? Willfinishtime
+        {
+            get { return this._Willfinishtime; }
+            set { this._Willfinishtime = value; }
         }
         private string _Request_type = "";
         public string Request_type

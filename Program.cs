@@ -12,6 +12,8 @@ using myorange_pmproject.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.FileProviders;
+using Radzen;
 
 
 
@@ -34,8 +36,12 @@ builder.Services.AddScoped<CurrentUserService>();
 
 builder.Services.AddScoped<FileUploadService>();
 
+builder.Services.AddRadzenComponents();
 
 builder.Services.AddHttpClient();
+
+builder.Services.AddControllers();
+
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -97,19 +103,38 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
+var image_path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "image_path");
+if (!Directory.Exists(image_path)) Directory.CreateDirectory(image_path);
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(image_path),
+    RequestPath = "/I"
+});
+
 app.UseRouting();
 
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+//app.MapBlazorHub();
+//app.MapFallbackToPage("/_Host");
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapBlazorHub();
+    endpoints.MapControllers();
+    endpoints.MapFallbackToPage("/_Host");
+});
 
 ////var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 //using (var scope = scopeFactory.CreateScope())
 ////{
-    ///var db = scope.ServiceProvider.GetRequiredService<PizzaStoreContext>();
-    //if (db.Database.EnsureCreated())
-    ////{
-     //   SeedData.Initialize(db);
-   // }
+///var db = scope.ServiceProvider.GetRequiredService<PizzaStoreContext>();
+//if (db.Database.EnsureCreated())
+////{
+//   SeedData.Initialize(db);
+// }
 //}
+
+
+
 
 app.Run();
