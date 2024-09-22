@@ -6,6 +6,7 @@ using myorange_pmproject.Models;
 using Microsoft.Extensions.Logging;
 using System.Linq.Dynamic.Core;
 using myorange_pmproject.Services;
+using System.Reflection.Metadata;
 namespace myorange_pmproject.Service
 {
     public class RequestService
@@ -35,7 +36,7 @@ namespace myorange_pmproject.Service
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public async Task<bool> Save(Project_requestDTO p)
+        public async Task<Project_request> Save(Project_requestDTO p)
         {
 
             var m = p.Id == 0 ? new Project_request() : await _context.ProjectRequest.FirstOrDefaultAsync(m => m.Id == p.Id); ;
@@ -45,6 +46,33 @@ namespace myorange_pmproject.Service
             _context.Entry(m).CurrentValues.SetValues(p);
 
             if (p.Id == 0) { _context.ProjectRequest.Add(m); }
+
+            await _context.SaveChangesAsync();
+            return m;
+        }
+
+        public async Task<bool> Save(Project_requestDTO p, int projectId, List<String> lstFiles)
+        {
+
+            var q = await this.Save(p);
+
+            int reuqestId = q.Id;
+
+            var m = p.Id == 0 ? new Project_request_list() : await _context.ProjectRequestList.FirstOrDefaultAsync(m => m.Id == p.Id); 
+            var plist = await _context.ProjectRequestList.FirstOrDefaultAsync(m => m.Projectid_project_requestid == reuqestId);
+            if (plist != null && plist.Id > 0)
+            {
+                plist.Projectid = projectId;
+            }
+            else
+            {
+
+                plist                             = new Project_request_list();
+                plist.Projectid                   = projectId;
+                plist.Projectid_project_requestid = reuqestId;
+                plist.Createtime = DateTime.Now;
+                _context.ProjectRequestList.Add(plist);
+            }
 
             await _context.SaveChangesAsync();
             return true;
@@ -88,24 +116,70 @@ namespace myorange_pmproject.Service
         private IQueryable<Project_requestDTO> GetModelQuery()
         {
 
-            return _context.ProjectRequest.Select(
-                     x => new Project_requestDTO
-                     {
-                         Id = x.Id,
-                         Title = x.Title,
-                         Content = x.Content,
-                         Createtime = x.Createtime,
-                         Request_type = x.Request_type,
-                        
-                         State = x.State,
-                         Managerid = x.Managerid,
-                         Finishtime = x.Finishtime,
-                         Willfinishtime = x.Willfinishtime,
-                         Starttime = x.Starttime
+            var q = from d in _context.ProjectRequest
+                    join list in _context.ProjectRequestList
+                    on d.Id equals list.Projectid_project_requestid into docList
+                    from list in docList.DefaultIfEmpty()
+                    join proj in _context.Project on list.Projectid equals proj.Id into projGroup
+                    from proj in projGroup.DefaultIfEmpty()
+                    select new Project_requestDTO
+                    {
+                        Id = d.Id,
+                        Title = d.Title,
+                        Content = d.Content,
+                        Createtime = d.Createtime,
+                        Request_type = d.Request_type,
 
-                     }
-                     );
+                        State = d.State,
+                        Managerid = d.Managerid,
+                        Finishtime = d.Finishtime,
+                        Willfinishtime = d.Willfinishtime,
+                        Starttime = d.Starttime,
+                        ProjectId = proj.Id,
+                        ProjectName = proj.Name
 
+                    };
+            return q;
+            /*
+                        return _context.ProjectRequest.Select(
+                                 x => new Project_requestDTO
+                                 {
+                                     Id = x.Id,
+                                     Title = x.Title,
+                                     Content = x.Content,
+                                     Createtime = x.Createtime,
+                                     Request_type = x.Request_type,
+
+                                     State = x.State,
+                                     Managerid = x.Managerid,
+                                     Finishtime = x.Finishtime,
+                                     Willfinishtime = x.Willfinishtime,
+                                     Starttime = x.Starttime
+
+                                 }
+                                 );
+
+                        var q = from d in _context.ProjectDocument
+                                join list in _context.ProjectDocumentList
+                    on d.Id equals list.Project_documentid into docList
+                                from list in docList.DefaultIfEmpty()
+                                join proj in _context.Project on list.Projectid equals proj.Id into projGroup
+                                from proj in projGroup.DefaultIfEmpty()
+                                select new Project_documentDTO
+                                {
+                                    Id = d.Id,
+                                    Title = d.Title,
+                                    Content = d.Content,
+                                    Createtime = d.Createtime,
+
+                                    State = d.State,
+                                    Managerid = d.Managerid,
+                                    ProjectId = proj.Id,
+                                    ProjectName = proj.Name
+
+                                };
+                        return q;
+            */
 
         }
 

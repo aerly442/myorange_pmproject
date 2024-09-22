@@ -16,14 +16,19 @@ public class Project_requestDTO {
     set { this._Id = value; }
     }
     private string _Title = "";
-     [Display(Name = "Title")]
+    
+    [Display(Name = "名称")]
+    [Required(ErrorMessage = "请输入名称")]
+    [StringLength(100, ErrorMessage = "名称长度不能超过100个字符")]
     public string Title
     {
     get { return this._Title; }
     set { this._Title = value; }
     }
     private string _Content = "";
-     [Display(Name = "Content")]
+   
+    [Display(Name = "描述")]
+    [Required(ErrorMessage = "请输入描述")]
     public string Content
     {
     get { return this._Content; }
@@ -67,18 +72,21 @@ public class Project_requestDTO {
         get { return this._Willfinishtime; }
         set { this._Willfinishtime = value; }
     }
-    private string _Request_type = "";
- [Display(Name = "Request_type")]
-public string Request_type
-{
-get { return this._Request_type; }
-set { this._Request_type = value; }
-}
-private int _Managerid = 0;
- [Display(Name = "Managerid")]
-public int Managerid
-{
-get { return this._Managerid; }
-set { this._Managerid = value; }
-}
+    private string _Request_type = "0";
+    [Display(Name = "Request_type")]
+    public string Request_type
+    {
+    get { return this._Request_type; }
+    set { this._Request_type = value; }
+    }
+    private int _Managerid = 0;
+     [Display(Name = "Managerid")]
+    public int Managerid
+    {
+    get { return this._Managerid; }
+    set { this._Managerid = value; }
+    }
+
+    public int? ProjectId { get; set; }
+    public string? ProjectName { get; set; }
 }

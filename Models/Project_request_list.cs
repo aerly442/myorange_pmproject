@@ -1,4 +1,7 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace myorange_pmproject.Models;
+[Table("Project_request_list")]
 public class Project_request_list { 
 
 

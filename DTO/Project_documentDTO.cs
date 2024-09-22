@@ -27,7 +27,7 @@ namespace myorange_pmproject.DTO
             set { this._Title = value; }
         }
         private string _Content = "";
-        [Display(Name = "Content")]
+        [Display(Name = "内容")]
         [Required(ErrorMessage = "请输入内容")]
         public string Content
         {

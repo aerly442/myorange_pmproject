@@ -38,6 +38,8 @@ namespace myorange_pmproject.Data
         public DbSet<myorange_pmproject.Models.Project_document> ProjectDocument { get; set; } = default!;
         //Project_project_document_list
         public DbSet<myorange_pmproject.Models.Project_project_document_list> ProjectDocumentList { get; set; } = default!;
+        public DbSet<myorange_pmproject.Models.Project_request_list> ProjectRequestList { get; set; } = default!;
+        //Project_request_list
         public IQueryable<T> GetQueryable<T>() where T : class
         {
             var dbSetProperty = GetType().GetProperty(typeof(T).Name, BindingFlags.Public | BindingFlags.Instance);

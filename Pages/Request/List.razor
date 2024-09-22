@@ -20,6 +20,7 @@
             <select class="form-control" @bind="searchDTO.FieldName">
                 <option selected value="title">名称</option>
                 <option  value="content">内容</option>
+                <option value="projectname">项目</option>
 
             </select>
         </div>
@@ -39,6 +40,7 @@
                 <tr>
                     <th scope="col">名称</th>
                     <th scope="col">类型</th>
+                    <th scope="col">项目</th>
                     <th scope="col">创建时间</th>
                     <th scope="col">状态</th>
                     <th scope="col" style="width:150px">操作</th>
@@ -52,6 +54,7 @@
                         <tr>
                             <td>@item.Title</td>
                             <td>@(item.Request_type=="1"?"需求":"bug")</td>
+                            <td>@(item.ProjectName)</td>
                            
                             <td>@item.Createtime.ToString("yyyy-MM-dd")</td>
 
