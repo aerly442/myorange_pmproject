@@ -1,0 +1,15 @@
+﻿@page "/Document/Detail/{Id:int}"
+@using myorange_pmproject.DTO
+@using myorange_pmproject.Service
+@using myorange_pmproject.Pages.Component;
+@inject DocumentService mService
+@inject ProjectService pService
+@attribute [Authorize(Roles = "Admin, User")]
+@inject NavigationManager nv
+@using Radzen
+@using Radzen.Blazor
+
+
+@code {
+
+}

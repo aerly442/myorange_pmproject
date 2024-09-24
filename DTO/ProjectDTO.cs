@@ -24,7 +24,7 @@ public class ProjectDTO {
     private string _Intro = "";
     [Display(Name = "Intro")]
     [Required(ErrorMessage = "请输入项目简介")]
-    [StringLength(100, ErrorMessage = "项目名称长度不能超过100个字符")]
+   
     public string Intro
     {
     get { return this._Intro; }

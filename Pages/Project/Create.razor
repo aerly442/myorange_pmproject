@@ -6,7 +6,7 @@
 @inject NavigationManager nv
 @using Radzen
 @using Radzen.Blazor
-
+ 
 <div class="container">  
     <h2>项目信息表单</h2>  
     <EditForm Model="@project" OnValidSubmit="@SaveProject">
@@ -33,13 +33,13 @@
             <input type="date" @bind="project.Endtime" class="form-control" id="endTime" name="endtime">  
         </div>  
         <div class="mb-3">  
-            <label for="projectState" class="form-label">状态</label>  
-            <select class="form-select" id="projectState" @bind="project.State" name="state">  
-                <option selected value="0">请选择状态...</option>  
-                <option value="1">建设中</option>             
-                <option value="2">已完成</option> 
-                <option value="-1">在规划</option>  
-            </select>  
+            <label for="projectState" class="form-label">状态</label>
+
+            <RadzenDropDown @bind-Value="@project.State" Data="@(ProjectState.GetProjectState())"
+                            TextProperty="@nameof(ProejctSelect.SelectText)"
+                            ValueProperty="@nameof(ProejctSelect.SelectValue)"
+                            Style="width: 100%; " Name="ddlProjects" />
+       
         </div>
         <div class="mb-3">
             <DataAnnotationsValidator />

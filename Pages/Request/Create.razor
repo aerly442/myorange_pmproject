@@ -70,14 +70,12 @@
 
     <div class="mb-3">
         <label for="Request_type" class="form-label">状态</label>
-        <select class="form-select" @bind="p.State">
-            <option  value="0">请选择</option>
-            <option value="1">新建</option>
-            <option value="2">进行中</option>
-            <option value="3">完成</option>
-            <option value="4">挂起</option>
-            <option value="-1">取消</option>
-        </select>
+
+        <RadzenDropDown @bind-Value="@p.State" Data="@(ProjectState.GetRequestState())"
+                            TextProperty="@nameof(ProejctSelect.SelectText)"
+                            ValueProperty="@nameof(ProejctSelect.SelectValue)"
+                            Style="width: 100%; " Name="ddlProjects" />
+       
 
     </div>
     <div class="mb-3">

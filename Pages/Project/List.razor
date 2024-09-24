@@ -51,7 +51,7 @@
                     @foreach (var item in lst)
                     {
                         <tr>
-                            <td>@item.Name</td>
+                            <td><a href="Project/Detail/@item.Id">@item.Name</a></td>
                             <td>@item.Starttime.ToString("yyyy-MM-dd")</td>
                             <td>@item.Endtime.ToString("yyyy-MM-dd")</td>
                             <td>@item.Createtime.ToString("yyyy-MM-dd")</td>
