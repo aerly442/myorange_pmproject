@@ -6,6 +6,7 @@ using myorange_pmproject.Models;
 using Microsoft.Extensions.Logging;
 using System.Linq.Dynamic.Core;
 using myorange_pmproject.Services;
+using Radzen;
 
 namespace myorange_pmproject.Service
 {
@@ -14,13 +15,15 @@ namespace myorange_pmproject.Service
         private readonly MyOrangePMPProjectContext _context;
         private readonly ILogger<DocumentService> _logger;
         private readonly CurrentUserService _currentUserService;
+        private readonly ProjectFileService _projectFileService;
         public DocumentService(MyOrangePMPProjectContext context, ILogger<DocumentService> logger,
-            CurrentUserService currentUserService)
+            CurrentUserService currentUserService, ProjectFileService projectFileService)
         {
 
             _context = context;
             _logger = logger;
             _currentUserService = currentUserService;
+            _projectFileService = projectFileService;
         }
 
         //public async Task<bool> Save123(ProjectDTO p)
@@ -46,12 +49,12 @@ namespace myorange_pmproject.Service
             _context.Entry(m).CurrentValues.SetValues(p);
 
             if (p.Id == 0) { _context.ProjectDocument.Add(m); }
-
+                  
             await _context.SaveChangesAsync();
             return m;
         }
 
-        public async Task<bool> Save(Project_documentDTO p,int projectId,List<String> lstFiles)
+        public async Task<bool> Save(Project_documentDTO p,int projectId,List<FileDTO> lstFiles)
         {
             //01 保存文档信息
             var d = await this.Save(p);
@@ -74,7 +77,10 @@ namespace myorange_pmproject.Service
 
             await _context.SaveChangesAsync();
 
+            //this._context.ProjectDocument.
             //03 保存附件
+            await _projectFileService.Save(lstFiles, d.Id,FileSource.Document);
+
             return true;
         }
 

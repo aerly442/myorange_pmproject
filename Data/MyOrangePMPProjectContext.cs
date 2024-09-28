@@ -39,6 +39,8 @@ namespace myorange_pmproject.Data
         //Project_project_document_list
         public DbSet<myorange_pmproject.Models.Project_project_document_list> ProjectDocumentList { get; set; } = default!;
         public DbSet<myorange_pmproject.Models.Project_request_list> ProjectRequestList { get; set; } = default!;
+
+        public DbSet<myorange_pmproject.Models.Project_file> ProjectFile { get; set; } = default!;
         //Project_request_list
         public IQueryable<T> GetQueryable<T>() where T : class
         {

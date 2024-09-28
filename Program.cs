@@ -36,6 +36,8 @@ builder.Services.AddScoped<CurrentUserService>();
 
 builder.Services.AddScoped<FileUploadService>();
 
+builder.Services.AddScoped<ProjectFileService>();
+
 builder.Services.AddRadzenComponents();
 
 builder.Services.AddHttpClient();

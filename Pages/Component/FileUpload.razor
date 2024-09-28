@@ -1,4 +1,5 @@
 ﻿@using myorange_pmproject.Service
+@using myorange_pmproject.DTO
 
 @inject IWebHostEnvironment Environment
 @inject FileUploadService fileUploadService
@@ -37,25 +38,25 @@
 
 
     [Parameter]  
-    public EventCallback<List<string>> OnUploadFinished { get; set; }  
-  
- 
+    public EventCallback<List<FileDTO>> OnUploadFinished { get; set; }  
+
+
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
     {
         isLoading       = true;
         loadedFiles.Clear();
         progressPercent = 0;
-        List<string> lstFiles = new List<string>();
+        List<FileDTO> lstFiles = new List<FileDTO>();
 
         foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
         {
-            string extName = fileUploadService.GetExtName(file.Name);
-            string aFileName = fileUploadService.GetFileName() + extName;
+            string extName      = fileUploadService.GetExtName(file.Name);
+            string aFileName    = fileUploadService.GetFileName() + extName;
             string relativePath = fileUploadService.GetFilePath() + "/" + aFileName; // 相对路径
-            string filePath = Environment.ContentRootPath + relativePath; // 获取绝对路径
+            string filePath     = Environment.WebRootPath + relativePath; // 获取绝对路径
 
-            var path = filePath;//Path.Combine(Environment.ContentRootPath, "upload", aFileName);
+            var path            = filePath;//Path.Combine(Environment.ContentRootPath, "upload", aFileName);
 
             await using FileStream writeStream = new(path, FileMode.Create);
             using var readStream = file.OpenReadStream(maxFileSize);
@@ -72,7 +73,11 @@
             }
 
             loadedFiles.Add(file);
-            lstFiles.Add(relativePath); 
+            lstFiles.Add(new FileDTO()
+            {
+                Filename = file.Name,
+                FileUrl  = relativePath
+            }); 
 
 
         }

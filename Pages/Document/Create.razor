@@ -26,7 +26,8 @@
 
         <RadzenHtmlEditor @bind-Value="p.Content"
                           style="height: 450px;"
-                          Input=@OnInput Change=@OnChange Paste=@OnPaste UploadComplete=@OnUploadComplete
+                          Input=@OnInput Change=@OnChange Paste=@OnPaste 
+                              UploadComplete=@OnUploadComplete
                           Execute=@OnExecute UploadUrl="upload/image" />
 
 
@@ -77,7 +78,7 @@
     public int Id { get; set; }
     private String ErrorDisplay = "none";
     private int ProjectId;
-    private List<string> lstFiles = new List<string>();
+    private List<FileDTO> lstFiles = new List<FileDTO>();
     private List<ProjectDTO> Projects;
 
 
@@ -93,8 +94,6 @@
                 this.ProjectId = p.ProjectId!=null ?(int)p.ProjectId:0;
                 StateHasChanged();
             }
-
-            //this.ProjectId = p.ProjectId!=null ?(int)p.ProjectId:0;
 
 
         }
@@ -141,7 +140,7 @@
     //     ProjectId  = nId ;
     // } 
 
-    private void HandleFileUploadEvent(List<string> _lstFiles)  
+    private void HandleFileUploadEvent(List<FileDTO> _lstFiles)
     {  
         this.lstFiles = _lstFiles ;
         // 处理来自子组件的数据  
@@ -162,7 +161,7 @@
         }
         else
         {
-            var blnSave = await mService.Save(p,ProjectId,null);
+            var blnSave = await mService.Save(p, ProjectId, this.lstFiles);
             ErrorInfo = blnSave ? "保存成功" : "保存失败";
             if (blnSave)
             {
